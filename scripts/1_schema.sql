@@ -18,9 +18,23 @@ CREATE TABLE songs (
        last_modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE users (
+    username VARCHAR(50) PRIMARY KEY,
+    password VARCHAR(250) NOT NULL,
+    user_role VARCHAR(50) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    account_enabled BOOLEAN NOT NULL DEFAULT true,
+    account_expired BOOLEAN NOT NULL DEFAULT false,
+    account_locked BOOLEAN NOT NULL DEFAULT false,
+    credentials_Expired BOOLEAN NOT NULL DEFAULT false
+);
+
 CREATE TABLE playlists (
      id SERIAL PRIMARY KEY,
      name VARCHAR (255) NOT NULL,
+     username VARCHAR(50) NOT NULL,
      created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
      last_modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -51,6 +65,11 @@ ALTER TABLE songs
 ADD CONSTRAINT fk_songs_albums
 FOREIGN KEY (album_id)
 REFERENCES albums (id);
+
+ALTER TABLE playlists
+ADD CONSTRAINT fk_users_playlists
+FOREIGN KEY (username)
+REFERENCES users (username);
 
 CREATE TABLE songs_playlists (
       id SERIAL PRIMARY KEY,
